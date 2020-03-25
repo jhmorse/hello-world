@@ -1,0 +1,86 @@
+---
+title: "probabilities"
+author: "John Morse"
+date: "3/24/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Probabilities
+
+_NOTE: All Page references are to the R Cookbook_
+
+Suppose proportion of people with red hair is 23%.
+If we select a sample of 38 people:
+- What is probability of exactly 4 people with red hair?
+- on the TI-84: binompdf(38, .23, 4) = 0.0286
+Page 223, density function with binomial distribution
+
+```{r}
+dbinom(4, size = 38, prob = 0.23)
+```
+
+- What is the probability at least 4 people have red hair?
+- on the TI-84: 1 - binomcdf(38, .23, 3) = 0.9854
+Page 224, distribution function with binomial distribution
+
+```{r}
+1 - pbinom(3, size = 38, prob = 0.23)
+```
+
+Alternatively:
+```{r}
+pbinom(3, size = 38, prob = 0.23, lower.tail = FALSE)
+```
+
+Note the definition of lower.tail:
+- if TRUE (default), probabilities are P[X ≤ x], otherwise, P[X > x]
+- setting to FALSE, it is getting GREATER THAN x, NOT greater than or equal
+
+#Problem 2
+Average score in class is 67.4, standard deviation is 11.3. Exam scores are normally distributed.
+	- If one student is selected at random, what is the probability the student will score less than 60.5?
+		○ In this case, we are selecting an individual from the population, so we use a simple z score:
+		○ z=(x−μ)/σ
+		○ x = 60.5, mean = 67.4, std dev = 11.3
+		○ z = -0.6106
+		○ normalcdf(-1E99, -0.6106, 0, 1) = 0.2707
+Page 243 and page 225
+
+```{r}
+# Calculating a z score
+z <- (60.5 - 67.4) / 11.3
+print(z)
+
+#Using the z-score to get the probability
+pnorm(z, mean = 0, sd = 1, lower.tail = TRUE)
+
+```
+
+		
+		
+		
+	- If a group of 10 students is selected, find probability that their mean score would be greater than 60.5?
+		○ In this case, we are selecting a sample mean
+		○ z=(x ̅−μ)/(σ/√n)
+		○ n = 10
+		○ z = -1.9309
+		○ 1 - normalcdf(-1E99, -1.9309, 0, 1) = 0.9733
+	- The Top 13% of all students score higher than ???
+		○ Use page 246
+		○ Since this is the Top 13%, 1 - 0.13 = 0.87
+		○ Find the z-score corresponding to the area 0.87
+		○ invNorm(0.87, 0, 1, LEFT) = 1.1264
+		○ Use the z-score and the formula:
+			○ x=μ+(z ∗ σ)
+		○ X = 67.4 + (1.1264 * 11.3) = 80.1283 
+
+
+
+
+
+
